@@ -18,7 +18,7 @@ library("emmeans")
 
 ## Tidy Data
 ```{r}
-#| label: explor-data
+#| label: explore-data
 
 ld <- language_diversity %>%
   mutate_if(is.character, as.factor) #is.character 
@@ -113,4 +113,59 @@ emmeans(
 )
 #emmean stands for estimated marginal mean
 #gives us where points would fall on a line at our specified values (here, it's 0,10,20). also incoporates doubt; it's a 95% confidence interval
+```
+
+```{r}
+# NMC examples using forward selection
+
+# 1. From the mtcars dataframe select the solumns 'mpg', 'wt', and 'drat'
+# and assign this subset of columns to a new object called 'my_cars'
+
+mtcars
+my_cars <- mtcars %>%
+  select(mpg, wt, drat)
+
+my_cars
+
+#Run the following models:
+
+mod_null <- lm(mpg ~ 1, data = my_cars)
+mod_wt   <- lm(mpg ~ 1 + wt, data = my_cars)
+mod_add  <- lm(mpg ~ 1+ wt + drat, data = my_cars)
+mod_int  <- lm(mpg ~ 1 + wt + drat + wt:drat, data = my_cars)
+
+# 2. Look at the summary of mod_null. What does the intercept tell you?
+
+summary(mod_null)
+
+#intercept = 20.091 --> mean of mpg is ~20.091
+#when you fit an intercept-only model, it gives you the mean of the dependent variable
+#adding in other effects: if i add another predictor/ more info, can i imporve the model? in this example: can we determine mpg with more accuracy?
+
+# 3. Look at the summary of mod_wt. What does the summary tell you?
+ 
+summary(mod_wt)
+# intercept = 37.285: when wt=0, mpg = 37.285
+# wt = -5.3445: a 1-unit increase in wt is associated with a 5.3445 decrease in mpg
+# standard error: withing above and below 1.8776 of 37.2851, within above and below 0.5591 of -5.3445
+# Pr(>|t|) aka p-val: the estimate is not statistically equal to zero
+# Adjusted R-squared=0.7446: This model can account for about 74.46 of the variance
+# F-stat p-val: at least one of the predictors is statistically significant
+
+# 4. Use a nested model comparison to test the additive effect of 'drat' (hint: use anova() function)
+
+anova(mod_wt, mod_add)
+summary(mod_wt)
+summary(mod_add)
+
+#F ratio below 1, don't need to add drat to make model more accurate
+
+# 5. Test interaction term using a NMC (nesting model comparison) and write out the important info in a comment below
+
+anova(mod_add, mod_int)
+
+#F ratio above 1, so the interaction between mpg and drat is something we can add to make the model more accurate
+#The interaction was significant (F(1) = 5.41 (F(1) = f-ratio with 1 degree of freedom, 5.41 > 1, p < 0.03). The effect of _ on mpg depends on __
+
+
 ```

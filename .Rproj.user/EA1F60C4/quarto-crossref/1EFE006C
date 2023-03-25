@@ -1,1 +1,1 @@
-{"headings":["setup","tidy-data","analyses","tables-and-plots"],"entries":[{"order":{"number":1,"section":[0,4,0,0,0,0,0]},"caption":"hello","key":"tbl-model1"},{"order":{"number":2,"section":[0,4,0,0,0,0,0]},"caption":"hello","key":"tbl-model3"}]}
+{"headings":["setup","tidy-data","analyses","tables-and-plots"],"entries":[{"key":"tbl-model3","caption":"hello","order":{"number":2,"section":[0,4,0,0,0,0,0]}},{"key":"tbl-model1","caption":"hello","order":{"number":1,"section":[0,4,0,0,0,0,0]}}]}
